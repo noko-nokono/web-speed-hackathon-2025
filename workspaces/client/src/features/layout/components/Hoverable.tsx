@@ -1,8 +1,6 @@
 import classNames from 'classnames';
-import { Children, cloneElement, ReactElement, Ref, useRef } from 'react';
+import { Children, cloneElement, ReactElement, Ref, useEffect, useRef, useState  } from 'react';
 import { useMergeRefs } from 'use-callback-ref';
-
-import { usePointer } from '@wsh-2025/client/src/features/layout/hooks/usePointer';
 
 interface Props {
   children: ReactElement<{ className?: string; ref?: Ref<unknown> }>;
@@ -18,7 +16,7 @@ export const Hoverable = (props: Props) => {
 
   const mergedRef = useMergeRefs([elementRef, child.props.ref].filter((v) => v != null));
 
-  const pointer = usePointer();
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const elementRect = elementRef.current?.getBoundingClientRect();
 
   const hovered =
@@ -27,6 +25,20 @@ export const Hoverable = (props: Props) => {
     pointer.x <= elementRect.right &&
     elementRect.top <= pointer.y &&
     pointer.y <= elementRect.bottom;
+
+    useEffect(() => {
+      if (!mergedRef.current) return;
+  
+      const handlePointerMove = (ev: MouseEvent) => {
+        setPointer({ x: ev.clientX, y: ev.clientY });
+      };
+  
+      window.addEventListener('pointermove', handlePointerMove);
+  
+      return () => {
+        window.removeEventListener('pointermove', handlePointerMove);
+      };
+    }, [mergedRef, setPointer]);
 
   return cloneElement(child, {
     className: classNames(

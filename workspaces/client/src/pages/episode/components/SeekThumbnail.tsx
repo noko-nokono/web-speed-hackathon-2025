@@ -1,8 +1,7 @@
 import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
-import { useRef } from 'react';
+import {  useEffect, useRef, useState } from 'react';
 
-import { usePointer } from '@wsh-2025/client/src/features/layout/hooks/usePointer';
 import { useDuration } from '@wsh-2025/client/src/pages/episode/hooks/useDuration';
 import { useSeekThumbnail } from '@wsh-2025/client/src/pages/episode/hooks/useSeekThumbnail';
 
@@ -15,7 +14,7 @@ interface Props {
 export const SeekThumbnail = ({ episode }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const seekThumbnail = useSeekThumbnail({ episode });
-  const pointer = usePointer();
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const duration = useDuration();
 
   const elementRect = ref.current?.parentElement?.getBoundingClientRect() ?? { left: 0, width: 0 };
@@ -27,6 +26,20 @@ export const SeekThumbnail = ({ episode }: Props) => {
   // サムネイルが画面からはみ出ないようにサムネイル中央を基準として left を計算する
   const MIN_LEFT = SEEK_THUMBNAIL_WIDTH / 2;
   const MAX_LEFT = elementRect.width - SEEK_THUMBNAIL_WIDTH / 2;
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const handlePointerMove = (ev: MouseEvent) => {
+      setPointer({ x: ev.clientX, y: ev.clientY });
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+    };
+  }, [ref, setPointer]);
 
   return (
     <div
