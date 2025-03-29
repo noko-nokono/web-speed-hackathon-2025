@@ -12,10 +12,7 @@ async function main() {
   await initializeDatabase();
 
   const app = fastify();
-
-  app.addHook('onSend', async (_req, reply) => {
-    reply.header('cache-control', 'no-store');
-  });
+  
   app.register(cors, {
     origin: true,
   });
