@@ -14,7 +14,7 @@ export function createRoutes(store: ReturnType<typeof createStore>): RouteObject
             return {
               Component: HomePage,
               async loader() {
-                return await prefetch(store);
+                return prefetch(store);
               },
             };
           },
@@ -25,7 +25,7 @@ export function createRoutes(store: ReturnType<typeof createStore>): RouteObject
             return {
               Component: EpisodePage,
               async loader({ params }) {
-                return await prefetch(store, params);
+                return prefetch(store, params);
               },
             };
           },
@@ -37,7 +37,7 @@ export function createRoutes(store: ReturnType<typeof createStore>): RouteObject
             return {
               Component: ProgramPage,
               async loader({ params }) {
-                return await prefetch(store, params);
+                return prefetch(store, params);
               },
             };
           },
@@ -49,7 +49,7 @@ export function createRoutes(store: ReturnType<typeof createStore>): RouteObject
             return {
               Component: SeriesPage,
               async loader({ params }) {
-                return await prefetch(store, params);
+                return prefetch(store, params);
               },
             };
           },
@@ -61,7 +61,7 @@ export function createRoutes(store: ReturnType<typeof createStore>): RouteObject
             return {
               Component: TimetablePage,
               async loader() {
-                return await prefetch(store);
+                return prefetch(store);
               },
             };
           },
@@ -73,7 +73,7 @@ export function createRoutes(store: ReturnType<typeof createStore>): RouteObject
             return {
               Component: NotFoundPage,
               async loader() {
-                return await prefetch(store);
+                return prefetch(store);
               },
             };
           },
@@ -82,7 +82,7 @@ export function createRoutes(store: ReturnType<typeof createStore>): RouteObject
       ],
       Component: Document,
       async loader() {
-        return await prefetch(store);
+        return prefetch(store);
       },
       path: '/',
     },
